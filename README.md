@@ -1,13 +1,12 @@
 # Smart Mining Decision Support System (DSS)
 
 [![GitHub Pages](https://img.shields.io/badge/GitHub-Pages-blue)](https://wushanshan.github.io/smartmining-dss)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## 📋 Overview
 
 An interactive visualization platform for optimizing open-pit mining haulage operations using **Stackelberg Game Theory**. This project serves as a conceptual framework for an MBA thesis demonstrating how bi-level optimization can resolve conflicts between mine dispatch centers and haulage fleets.
 
-**🔗 Live Demo:** [View on GitHub Pages](https://wushanshan.github.io/smartmining-dss)
+**🔗 Live Demo:** [View on GitHub Pages](https://sketchicles.github.io/mine-hauling-stackelberg-game)
 
 ## 🎯 Problem Statement
 
