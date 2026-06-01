@@ -6,7 +6,7 @@
 
 An interactive visualization platform for optimizing open-pit mining haulage operations using **Stackelberg Game Theory**. This project serves as a conceptual framework for an MBA thesis demonstrating how bi-level optimization can resolve conflicts between mine dispatch centers and haulage fleets.
 
-**🔗 Live Demo:** [View on GitHub Pages](https://sketchicles.github.io/mine-hauling-stackelberg-game)
+**🔗 Live Demo:** [View on GitHub Pages](https://sketchicles.github.io/Mine-Hauling-Stackelberg-Game/)
 
 ## 🎯 Problem Statement
 
