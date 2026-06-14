@@ -5,13 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thesis Visualization: Smart Mining DSS</title>
     <style>
-        /* Academic & Professional Theme */
         :root {
             --bg-body: #f8f9fa;
             --bg-card: #ffffff;
             --text-primary: #212529;
             --text-secondary: #6c757d;
-            --accent: #0d6efd; /* Professional Blue */
+            --accent: #0d6efd;
             --accent-hover: #0a58ca;
             --border: #dee2e6;
             --highlight-bg: #e7f1ff;
@@ -57,13 +56,12 @@
             margin-top: 10px;
         }
 
-        /* Grid Layout */
         .grid-row { display: grid; gap: 25px; margin-bottom: 30px; }
         .grid-2 { grid-template-columns: 1fr 1fr; }
 
-        /* Visualization Area */
+        /* Updated Visualization Area for Pit Map */
         .viz-panel {
-            background: #f1f5f9;
+            background: #2c3e50; /* Dark background to make map pop */
             border: 1px solid var(--border);
             border-radius: 8px;
             padding: 15px;
@@ -72,17 +70,35 @@
             align-items: center;
             justify-content: center;
         }
-        .viz-panel h2 { margin-top: 0; text-align: center; width: 100%; }
+        .viz-panel h2 { color: #fff; margin-top: 0; text-align: center; width: 100%; font-size: 1.2rem; }
+        
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px; /* Matches 1250m width */
+            aspect-ratio: 1250 / 1400; /* Matches 1400m height */
+            background: #1a252f;
+            border: 2px solid #7f8c8d;
+            border-radius: 4px;
+            overflow: hidden;
+        }
         
         canvas {
-            background: #e2e8f0;
-            border: 2px solid var(--border);
-            border-radius: 50%;
             width: 100%;
-            max-width: 450px;
-            aspect-ratio: 1;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
+            height: 100%;
+            display: block;
         }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 12px;
+            font-size: 0.85rem;
+            color: #ecf0f1;
+        }
+        .legend-item { display: flex; align-items: center; gap: 6px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
 
         /* Control Panel */
         .control-panel { padding: 20px; border: 1px solid var(--border); border-radius: 8px; }
@@ -105,9 +121,7 @@
             background: var(--accent);
             border-radius: 50%;
             cursor: pointer;
-            transition: background 0.2s;
         }
-        input[type=range]::-webkit-slider-thumb:hover { background: var(--accent-hover); }
         
         .slider-value {
             background: var(--highlight-bg);
@@ -120,7 +134,6 @@
             font-family: monospace;
         }
 
-        /* KPI Cards */
         .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 25px; }
         .kpi-card {
             background: #f8f9fa;
@@ -132,7 +145,6 @@
         .kpi-value { font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
         .kpi-label { font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
 
-        /* Text Sections */
         .section-title {
             color: var(--accent);
             font-size: 1.2rem;
@@ -160,7 +172,6 @@
             font-size: 0.9rem;
         }
 
-        /* Methodology Steps */
         .method-step { display: flex; gap: 12px; margin-bottom: 12px; align-items: flex-start; }
         .step-num {
             background: var(--accent);
@@ -173,7 +184,6 @@
             font-size: 0.8rem;
         }
 
-        /* Flowchart */
         .flow-steps {
             display: flex;
             justify-content: space-between;
@@ -204,7 +214,6 @@
             margin-top: 12px;
         }
 
-        /* NPV Section */
         .npv-box {
             background: var(--highlight-bg);
             border: 1px solid var(--accent);
@@ -239,20 +248,21 @@
 <div class="container">
     <header>
         <h1>Quantitative Optimization of Open-Pit Haulage Systems: A Data-Driven Stackelberg Game Approach with Interactive Decision Support</h1>
-        <p>This research presents a quantitative framework modeling the two-stage optimization problem between the mine dispatch center and haulage fleet, visualized through an interactive computational dashboard.</p>
+        <p>This research presents a quantitative framework modeling the bi-level optimization problem between the mine dispatch center and haulage fleet, visualized through an interactive computational dashboard.</p>
         <span class="badge">MBA Thesis Concept | Wu Shanshan | Prepared for Dr. Zhao Chuan, BTBU 2027</span>
     </header>
 
-    <!-- Main Interactive Area: Map + Controls -->
     <div class="grid-row grid-2">
         
-        <!-- Left: Visualization Map -->
+        <!-- Left: Realistic Pit Visualization -->
         <div class="viz-panel">
-            <h2>Bird's-Eye View: Sample Fleet Dispatch</h2>
-            <canvas id="mineMap" width="500" height="500"></canvas>
-            <div style="margin-top: 10px; font-size: 0.85rem; color: var(--text-secondary);">
-                <span style="display:inline-block; width: 12px; height: 12px; background: #ef4444; border-radius: 50%; margin-right: 5px;"></span> Hauling
-                <span style="display:inline-block; width: 12px; height: 12px; background: #3b82f6; border-radius: 50%; margin-left: 10px; margin-right: 5px;"></span> Returning
+            <h2>Bird's-Eye View: Real-Time Fleet Dispatch (1250m × 1400m)</h2>
+            <div class="canvas-container">
+                <canvas id="mineMap" width="500" height="560"></canvas>
+            </div>
+            <div class="legend">
+                <div class="legend-item"><div class="dot" style="background: #ef4444;"></div> Hauling (Loaded, Outbound)</div>
+                <div class="legend-item"><div class="dot" style="background: #3b82f6;"></div> Returning (Empty, Inbound)</div>
             </div>
         </div>
 
@@ -260,7 +270,6 @@
         <div class="control-panel">
             <h2 class="section-title">Operational Parameters</h2>
             
-            <!-- Slider 1: Fleet Size -->
             <div class="slider-group">
                 <label>Fleet Size (Active Trucks)</label>
                 <div class="slider-container">
@@ -269,7 +278,6 @@
                 </div>
             </div>
 
-            <!-- Slider 2: Ore Value -->
             <div class="slider-group">
                 <label>Ore Value ($/Ton)</label>
                 <div class="slider-container">
@@ -278,7 +286,6 @@
                 </div>
             </div>
 
-            <!-- Slider 3: Fuel Cost -->
             <div class="slider-group">
                 <label>Fuel Cost ($/Liter)</label>
                 <div class="slider-container">
@@ -287,7 +294,6 @@
                 </div>
             </div>
 
-            <!-- KPI Grid -->
             <h3 style="margin-top: 20px; margin-bottom: 10px; font-size: 1rem; color: var(--text-secondary);">Key Performance Indicators</h3>
             <div class="kpi-grid">
                 <div class="kpi-card">
@@ -306,7 +312,7 @@
         </div>
     </div>
 
-    <!-- Text Sections -->
+    <!-- Text Sections (Preserved from previous version) -->
     <div class="grid-row grid-2">
         <div class="content-card">
             <h2 class="section-title">Problem Description</h2>
@@ -314,7 +320,7 @@
                 Open-pit mining operations face a critical challenge in truck-shovel allocation. The core problem is a <span class="highlight">conflict of interest</span>: the Dispatch Center aims to maximize production and grade adherence, while the Haulage Fleet (often outsourced) aims to minimize fuel consumption and operational costs.
             </p>
             <p style="color: var(--text-secondary);">
-                Traditional heuristic methods often fail to find a global optimum, leading to excessive queue times at shovels and suboptimal fuel usage. This thesis proposes a quantitative framework to resolve this bi-level decision-making process using Game Theory. Basically, the dispatch center wants maximum production, while the fleet wants to save on fuel costs. They have different goals, causing conflict in the daily schedule. This thesis proposes a quantitative framework to resolve this two-stage decision-making process.
+                Traditional heuristic methods often fail to find a global optimum, leading to excessive queue times at shovels and suboptimal fuel usage. This thesis proposes a quantitative framework to resolve this bi-level decision-making process using Game Theory.
             </p>
         </div>
         
@@ -344,51 +350,31 @@
         </div>
     </div>
 
-    <!-- Methodology & Phases -->
     <div class="grid-row">
         <div class="content-card">
             <h2 class="section-title">Development Phases & Implementation Pipeline</h2>
             <div class="flow-steps">
-                <div class="flow-step">
-                    <div class="title">1. Data Pipeline</div>
-                    <div class="desc">Sample Field Data from Mine</div>
-                </div>
+                <div class="flow-step"><div class="title">1. Data Pipeline</div><div class="desc">Telemetry & GPS</div></div>
                 <div class="flow-arrow">→</div>
-                <div class="flow-step">
-                    <div class="title">2. Game Model</div>
-                    <div class="desc">Stackelberg Logic</div>
-                </div>
+                <div class="flow-step"><div class="title">2. Bi-Level Model</div><div class="desc">Stackelberg Logic</div></div>
                 <div class="flow-arrow">→</div>
-                <div class="flow-step" style="border-color: var(--accent); background: var(--highlight-bg);">
-                    <div class="title">3. Python Backend</div>
-                    <div class="desc">Optimization Algo</div>
-                </div>
+                <div class="flow-step" style="border-color: var(--accent); background: var(--highlight-bg);"><div class="title">3. Python Backend</div><div class="desc">Optimization Algo</div></div>
                 <div class="flow-arrow">→</div>
-                <div class="flow-step">
-                    <div class="title">4. Simulation</div>
-                    <div class="desc">SimPy Validation</div>
-                </div>
+                <div class="flow-step"><div class="title">4. Simulation</div><div class="desc">SimPy Validation</div></div>
                 <div class="flow-arrow">→</div>
-                <div class="flow-step">
-                    <div class="title">5. Dashboard</div>
-                    <div class="desc">Streamlit UI</div>
-                </div>
+                <div class="flow-step"><div class="title">5. Dashboard</div><div class="desc">Streamlit UI</div></div>
                 <div class="flow-arrow">→</div>
-                <div class="flow-step">
-                    <div class="title">6. NPV Analysis</div>
-                    <div class="desc">Economic Proxy</div>
-                </div>
+                <div class="flow-step"><div class="title">6. NPV Analysis</div><div class="desc">Economic Proxy</div></div>
             </div>
             <p class="python-note">*Note: The core mathematical engine and data processing will be developed exclusively in Python to ensure scalability and reproducibility.</p>
         </div>
     </div>
 
-    <!-- NPV Framework Section -->
     <div class="grid-row">
         <div class="content-card npv-box">
             <h2 class="section-title" style="border-color: var(--accent);">Economic Validation: NPV Proxy Framework</h2>
             <p style="color: var(--text-secondary); line-height: 1.6;">
-                Haulage is a cost center, but its optimization directly impacts mine profitability. We utilize a standardized proxy NPV formula to quantify the economic impact of optimized dispatch decisions in real-time. The "Haulage Cost per Ton" is dynamically calculated by the model based on fuel efficiency and fleet utilization.
+                Haulage is a cost center, but its optimization directly impacts mine profitability. We utilize a standardized proxy NPV formula to quantify the economic impact of optimized dispatch decisions in real-time.
             </p>
             <div class="formula">
                 NPV = Σ [ (Ore Value per Ton − Haulage Cost per Ton) × Annual Production ] × Discount Factor
@@ -410,84 +396,215 @@
 
 <script>
     // ==============================================================================
-    // VISUALIZATION ENGINE: BIRD'S EYE VIEW
+    // VISUALIZATION ENGINE: REALISTIC PIT MAP
     // ==============================================================================
     const canvas = document.getElementById('mineMap');
     const ctx = canvas.getContext('2d');
+    const width = canvas.width;  // 500
+    const height = canvas.height; // 560
     
-    const centerX = 250, centerY = 250;
-    const pitRx = 60, pitRy = 40;
-    const roadRx = 160, roadRy = 120;
+    // Center of the pit (approximate based on image)
+    const cx = width / 2;
+    const cy = height / 2;
     
-    let trucks = [];
-    for (let i = 0; i < 25; i++) {
-        trucks.push({
-            angle: (Math.PI * 2 * i) / 25,
-            speed: 0.002 + Math.random() * 0.001,
-            state: Math.random() > 0.3 ? 'Hauling' : 'Returning',
-            id: i
+    // Generate Spiral Haul Road Path
+    // Mimics the switchback terraces going from surface (outer) to pit bottom (inner)
+    const path = [];
+    const turns = 4.5; // Number of spiral levels
+    const maxR = 220;  // Outer radius
+    const minR = 30;   // Inner radius (pit bottom)
+    const totalPoints = 500;
+    
+    for (let i = 0; i <= totalPoints; i++) {
+        let t = i / totalPoints; // 0 to 1
+        let angle = t * Math.PI * 2 * turns;
+        
+        // Radius decreases as we go inward
+        let r = maxR - t * (maxR - minR);
+        
+        // Add irregularity to mimic real mine roads (not perfect circles)
+        let noiseX = Math.sin(angle * 3) * 15 + Math.cos(angle * 7) * 10;
+        let noiseY = Math.cos(angle * 4) * 15 + Math.sin(angle * 6) * 10;
+        
+        // Aspect ratio adjustment (1250x1400 -> 0.89)
+        let aspectRatio = 1250 / 1400;
+        
+        path.push({
+            x: cx + (r + noiseX) * Math.cos(angle) * aspectRatio,
+            y: cy + (r + noiseY) * Math.sin(angle)
         });
     }
 
-    function drawMap() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Initialize Trucks
+    let trucks = [];
+    const maxTrucks = 25;
+    
+    for (let i = 0; i < maxTrucks; i++) {
+        trucks.push({
+            id: i + 1,
+            progress: Math.random(), // Random position along path (0 to 1)
+            speed: 0.0003 + Math.random() * 0.0002, // Base speed
+            direction: Math.random() > 0.5 ? 1 : -1, // 1 = Hauling (Outward), -1 = Returning (Inward)
+            state: Math.random() > 0.5 ? 'Hauling' : 'Returning'
+        });
+    }
+
+    function drawPitBackground() {
+        // Clear canvas
+        ctx.fillStyle = '#1a252f';
+        ctx.fillRect(0, 0, width, height);
         
-        // Pit
+        // Draw Pit Terraces (Concentric irregular shapes)
+        const colors = ['#34495e', '#2c3e50', '#243342', '#1c2833'];
+        for (let level = 0; level < 4; level++) {
+            let r = maxR - (level * 45);
+            ctx.beginPath();
+            for (let a = 0; a <= Math.PI * 2; a += 0.1) {
+                let noise = Math.sin(a * 3 + level) * 20;
+                let x = cx + (r + noise) * Math.cos(a) * (1250/1400);
+                let y = cy + (r + noise) * Math.sin(a);
+                if (a === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.closePath();
+            ctx.fillStyle = colors[level % colors.length];
+            ctx.fill();
+            ctx.strokeStyle = '#7f8c8d';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+        }
+        
+        // Draw Haul Road (The spiral path)
         ctx.beginPath();
-        ctx.ellipse(centerX, centerY, pitRx, pitRy, 0, 0, Math.PI * 2);
-        ctx.fillStyle = '#cbd5e1'; ctx.fill();
-        ctx.strokeStyle = '#64748b'; ctx.lineWidth = 3; ctx.stroke();
-        ctx.fillStyle = '#475569'; ctx.font = 'bold 14px Arial'; ctx.textAlign = 'center';
-        ctx.fillText('LOADING PIT', centerX, centerY + 5);
+        ctx.moveTo(path[0].x, path[0].y);
+        for (let i = 1; i < path.length; i++) {
+            ctx.lineTo(path[i].x, path[i].y);
+        }
+        ctx.strokeStyle = '#95a5a6'; // Road color
+        ctx.lineWidth = 8;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.stroke();
+        
+        // Road center line
+        ctx.beginPath();
+        ctx.moveTo(path[0].x, path[0].y);
+        for (let i = 1; i < path.length; i++) {
+            ctx.lineTo(path[i].x, path[i].y);
+        }
+        ctx.strokeStyle = '#f1c40f'; // Yellow center line
+        ctx.lineWidth = 1;
+        ctx.setLineDash([5, 5]);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        
+        // Draw Coordinate System Overlay (Matching the image)
+        // Origin marker
+        ctx.fillStyle = '#fff';
+        ctx.font = '10px Arial';
+        ctx.fillText('[0, 0, -15.80]', cx - 30, cy - 20);
+        
+        // X Axis (Red)
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(cx + 40, cy);
+        ctx.strokeStyle = '#e74c3c';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.fillStyle = '#e74c3c';
+        ctx.fillText('X', cx + 45, cy + 4);
+        
+        // Y Axis (Green)
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(cx, cy + 40);
+        ctx.strokeStyle = '#2ecc71';
+        ctx.stroke();
+        ctx.fillStyle = '#2ecc71';
+        ctx.fillText('Y', cx + 4, cy + 45);
+        
+        // Scale Bar
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(20, height - 30, 100, 4);
+        ctx.fillText('250 m', 60, height - 15);
+        ctx.fillText('1250 m', width/2 - 20, 20);
+        ctx.save();
+        ctx.translate(15, height/2);
+        ctx.rotate(-Math.PI/2);
+        ctx.fillText('1400 m', 0, 0);
+        ctx.restore();
+    }
 
-        // Haul Road
-        ctx.beginPath();
-        ctx.ellipse(centerX, centerY, roadRx, roadRy, 0, 0, Math.PI * 2);
-        ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 12; ctx.stroke();
-        ctx.beginPath();
-        ctx.ellipse(centerX, centerY, roadRx, roadRy, 0, 0, Math.PI * 2);
-        ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 2; ctx.setLineDash([10, 10]); ctx.stroke(); ctx.setLineDash([]);
-
-        // Trucks
+    function drawTrucks() {
         const fleetSize = parseInt(document.getElementById('fleetSize').value);
         const activeTrucks = trucks.slice(0, fleetSize);
         
-        activeTrucks.forEach(t => {
-            t.angle += t.speed;
-            let x = centerX + roadRx * Math.cos(t.angle);
-            let y = centerY + roadRy * Math.sin(t.angle);
+        activeTrucks.forEach(truck => {
+            // Update progress
+            truck.progress += truck.speed * truck.direction;
             
-            ctx.fillStyle = t.state === 'Returning' ? '#3b82f6' : '#ef4444';
-            ctx.beginPath(); ctx.arc(x, y, 6, 0, Math.PI * 2); ctx.fill();
-            ctx.fillStyle = '#fff'; ctx.font = '8px Arial'; ctx.textBaseline = 'middle';
-            ctx.fillText(t.id + 1, x, y);
+            // Loop logic
+            if (truck.progress >= 1) {
+                truck.progress = 1;
+                truck.direction = -1; // Reached surface, now return
+                truck.state = 'Returning';
+            } else if (truck.progress <= 0) {
+                truck.progress = 0;
+                truck.direction = 1; // Reached bottom, now haul
+                truck.state = 'Hauling';
+            }
+            
+            // Calculate position on path
+            let pathIndex = Math.floor(truck.progress * (path.length - 1));
+            pathIndex = Math.max(0, Math.min(pathIndex, path.length - 1));
+            let pos = path[pathIndex];
+            
+            // Draw Truck
+            ctx.beginPath();
+            ctx.arc(pos.x, pos.y, 5, 0, Math.PI * 2);
+            ctx.fillStyle = truck.state === 'Hauling' ? '#ef4444' : '#3b82f6';
+            ctx.fill();
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+            
+            // Truck ID (only show if fleet is small enough to avoid clutter)
+            if (fleetSize <= 15) {
+                ctx.fillStyle = '#fff';
+                ctx.font = '8px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(truck.id, pos.x, pos.y - 8);
+            }
         });
-        requestAnimationFrame(drawMap);
     }
-    drawMap();
+
+    function animate() {
+        drawPitBackground();
+        drawTrucks();
+        requestAnimationFrame(animate);
+    }
+
+    // Start Animation
+    animate();
 
     // ==============================================================================
-    // LOGIC ENGINE: NPV & KPI CALCULATIONS (FIXED)
+    // LOGIC ENGINE: NPV & KPI CALCULATIONS
     // ==============================================================================
     function updateDashboard() {
         try {
-            // 1. Get Slider Values
             const fleet = parseInt(document.getElementById('fleetSize').value);
             const oreValue = parseInt(document.getElementById('oreValue').value);
             const fuel = parseFloat(document.getElementById('fuelCost').value);
 
-            // Update Slider Display
             document.getElementById('fleetSizeVal').textContent = fleet;
             document.getElementById('oreValueVal').textContent = '$' + oreValue;
             document.getElementById('fuelVal').textContent = '$' + fuel.toFixed(2);
 
-            // 2. CALCULATE METRICS
-            // Efficiency: Drops slightly with large fleets (congestion) or high fuel costs (idling)
+            // Efficiency Calculation
             let efficiency = 95 - (fleet * 0.3) - (fuel * 0.5);
             efficiency = Math.max(60, Math.min(99, efficiency));
 
             // Haulage Cost ($/Ton)
-            // Base variable + fixed cost distribution + efficiency penalty
             let haulageCostPerTon = (0.45 * fuel) + (15.0 / (fleet * 0.5 + 5));
             haulageCostPerTon = haulageCostPerTon * (1 + (95 - efficiency)/100);
 
@@ -495,11 +612,11 @@
             let annualProduction = fleet * 120000 * (efficiency / 100);
 
             // Proxy NPV Calculation
-            const discountFactor = 3.5; // ~5 years @ 10% WACC
+            const discountFactor = 3.5;
             const profitPerTon = oreValue - haulageCostPerTon;
             const npv = profitPerTon * annualProduction * discountFactor;
 
-            // 3. UPDATE UI
+            // Update UI
             document.getElementById('kpiEfficiency').textContent = Math.round(efficiency) + '%';
             document.getElementById('kpiCost').textContent = '$' + haulageCostPerTon.toFixed(2);
             
@@ -513,7 +630,6 @@
         }
     }
 
-    // Initialize on Load
     updateDashboard();
 </script>
 </body>
